@@ -42,7 +42,7 @@
             let splitTerms = terms.split(".");
             let miniSums = new Array(); //int array of given values
             let bigSums = new Array(); //int array of net change per type (financial, operations etc.)
-            let answer = "";
+            let answer = "<br>";
             for (let i = 0; i < order.length; i++) {
                 //if get 'c', add up all numbers currently in miniSums and push to bigSums
                 if (order[i].includes("c")) {
@@ -51,18 +51,24 @@
                         tempSum = tempSum + miniSums.shift();
                     }
                     bigSums.push(tempSum);
-                }
-                let tItem = ((Number(order[i])) - 1) * 2; //index of item in splitTerms
-                let tValue = tItem + 1; //index of value in splitTerms
-                if (splitTerms[tValue].includes("(")) {
-                    miniSums.push(-1 * Number(splitTerms[tValue].slice(1, -1)));
+                    answer = answer + tempSum + "<br>";
                 }
                 else {
-                    answer = answer + splitTerms[tValue] + "<br>";
-                    miniSums.push(Number(splitTerms[tValue]));
+                    let tItem = ((Number(order[i])) - 1) * 2; //index of item in splitTerms
+                    let tValue = tItem + 1; //index of value in splitTerms
+                    if (splitTerms[tValue].includes("(")) {
+                        let currNum = -1 * Number(splitTerms[tValue].slice(1, -1));
+                        miniSums.push(currNum);
+                        answer = answer + splitTerms[tItem] + ": " + splitTerms[tValue] + "<br>";
+                    }
+                    else {
+                        let currNum = Number(splitTerms[tValue]);
+                        miniSums.push(currNum);
+                        answer = answer + splitTerms[tItem] + ": " + splitTerms[tValue] + "<br>";
+                    }
                 }
             }
-            document.getElementById('answer').innerText = answer;
+            document.getElementById('answer').innerHTML = answer;
         }
     </script>
 </body>
