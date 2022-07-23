@@ -1,0 +1,70 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <title>
+        Balance Sheet Matcher
+    </title>
+</head>
+
+<body>
+    <form>
+        <label for="numTerms">Number of items:</label><br>
+        <input type="text" id="numTerms" name="numTerms"><br>
+        <label for="items">Items:</label><br>
+        <input type="text" id="items" name="items"><br>
+        <label for="cmds">Commands:</label><br>
+        <input type="text" id="cmds" name="cmds"><br><br>
+        <input type="button" value="Go!" id="process" />
+    </form>
+
+    <span>The output is: <span id="answer"></span></span>
+
+    <script>
+        // function myFunction() {
+        //     // document.getElementById("answer").innerHTML = "Paragraph changed.";
+        //     main();
+        // }
+        document.getElementById('process').addEventListener('click', main);
+        //main, read in input
+        //int num of terms in chart
+        //Big input
+        //item. value.
+        //if (value), means negative/minus/subtract
+        //Small input: order
+        //1-indexed, c (meaning calc, add together the numbers we've just seen)
+        //Summative process: net increase in cash is add all calc results together, () for negative
+        //add net increase to beginning value if provided, otherwise use 0 for beginning value
+        function main() {
+            let numTerms = document.getElementById('numTerms').value;
+            let terms = document.getElementById('items').value;
+            let order = document.getElementById('cmds').value;
+            let splitTerms = terms.split(".");
+            let miniSums = new Array(); //int array of given values
+            let bigSums = new Array(); //int array of net change per type (financial, operations etc.)
+            let answer = "";
+            for (let i = 0; i < order.length; i++) {
+                //if get 'c', add up all numbers currently in miniSums and push to bigSums
+                if (order[i].includes("c")) {
+                    let tempSum = 0;
+                    while (miniSums.length > 0) {
+                        tempSum = tempSum + miniSums.shift();
+                    }
+                    bigSums.push(tempSum);
+                }
+                let tItem = ((Number(order[i])) - 1) * 2; //index of item in splitTerms
+                let tValue = tItem + 1; //index of value in splitTerms
+                if (splitTerms[tValue].includes("(")) {
+                    miniSums.push(-1 * Number(splitTerms[tValue].slice(1, -1)));
+                }
+                else {
+                    answer = answer + splitTerms[tValue] + "<br>";
+                    miniSums.push(Number(splitTerms[tValue]));
+                }
+            }
+            document.getElementById('answer').innerText = answer;
+        }
+    </script>
+</body>
+
+</html>
